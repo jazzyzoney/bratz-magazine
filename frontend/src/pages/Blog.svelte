@@ -3,43 +3,43 @@
     import { user } from '../stores/userStore.js';
     import { currentPostId, currentPage } from '../stores/pageStore.js';
 
-    let blog = null;
-    let comments = [];
-    let newComment = "";
+    let blog = null
+    let comments = []
+    let newComment = ""
 
     onMount(async () => {
         if (!$currentPostId) {
-            $currentPage = 'home'; // Safety: Go back if no ID set
+            $currentPage = 'home'
             return;
         }
-        await loadBlog();
-        await loadComments();
-    });
+        await loadBlog()
+        await loadComments()
+    })
 
     async function loadBlog() {
-        const res = await fetch(`http://localhost:8080/api/blogs/${$currentPostId}`);
-        const data = await res.json();
-        blog = data.data;
+        const res = await fetch(`http://localhost:8080/api/blogs/${$currentPostId}`)
+        const data = await res.json()
+        blog = data.data
     }
 
     async function loadComments() {
-        const res = await fetch(`http://localhost:8080/api/comments/${$currentPostId}`);
-        const data = await res.json();
-        comments = data.data;
+        const res = await fetch(`http://localhost:8080/api/comments/${$currentPostId}`)
+        const data = await res.json()
+        comments = data.data
     }
 
     async function postComment() {
-        if (!newComment.trim()) return;
+        if (!newComment.trim()) return
 
         await fetch('http://localhost:8080/api/comments', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ blogId: $currentPostId, content: newComment }),
             credentials: 'include'
-        });
+        })
 
-        newComment = "";
-        loadComments(); // Refresh list
+        newComment = ""
+        loadComments()
     }
 </script>
 

@@ -3,8 +3,8 @@
     import { user } from '../stores/userStore.js'
     import { currentPage } from '../stores/pageStore.js';
     
-    let loading = false;
-    let message = "";
+    let loading = false
+    let message = ""
     let drafts = []
 
     onMount(() => {
@@ -15,8 +15,8 @@
         if(!$user) return
         const characterName = $user.username.toLowerCase()
 
-        loading = true;
-        message = `${$user.username} is writing a blog... 💅`;
+        loading = true
+        message = `${$user.username} is writing a blog... 💅`
 
         try {
             const response = await fetch('http://localhost:8080/api/blogs/generate', {
@@ -26,34 +26,34 @@
                 credentials: 'include' 
             });
 
-            const data = await response.json();
+            const data = await response.json()
             
             if (data.success) {
-                message = `✨ Success! ${data.blog.title} has been drafted.`;
+                message = `✨ Success! ${data.blog.title} has been drafted.`
                 await loadDrafts()
             } else {
-                message = `❌ Error: ${data.error}`;
+                message = `❌ Error: ${data.error}`
             }
         } catch (error) {
-            message = "❌ Network error. Is the backend running?";
+            message = "❌ Network error. Is the backend running?"
         } finally {
-            loading = false;
+            loading = false
         }
     }
 
     async function generateMagazine() {
         loading = true;
-        message = "Generating full Magazine Issue... (This takes a moment!) 📚";
+        message = "Generating full Magazine Issue... (This takes a moment!) 📚"
         try {
             const res = await fetch('http://localhost:8080/api/issues/generate', { 
                 method: 'POST', credentials: 'include' 
-            });
-            const data = await res.json();
+            })
+            const data = await res.json()
             if(data.success) {
-                message = `✨ Published: ${data.title}!`;
+                message = `✨ Published: ${data.title}!`
             }
-        } catch(e) { message = "Error generating issue"; }
-        finally { loading = false; }
+        } catch(e) { message = "Error generating issue" }
+        finally { loading = false }
 }
 
     async function loadDrafts() {

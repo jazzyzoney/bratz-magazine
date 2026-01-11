@@ -1,58 +1,53 @@
 <script>
     import { onMount } from 'svelte';
-    import { user } from '../stores/userStore.js'; // Needed for comments
+    import { user } from '../stores/userStore.js';
 
-    // State
-    let viewMode = 'list'; // 'list' or 'single'
-    let activeFilter = 'all'; // 'all', 'cloe', etc.
-    let blogs = [];
-    let selectedBlog = null; // The full blog object when reading
-    let comments = []; // Comments for the selected blog
-    let newComment = "";
+    let viewMode = 'list'
+    let activeFilter = 'all'
+    let blogs = []
+    let selectedBlog = null
+    let comments = []
+    let newComment = ""
 
-    // 1. Fetch Blogs (Filtered)
     async function loadBlogs(filter) {
-        activeFilter = filter;
-        viewMode = 'list'; // Switch back to list view
+        activeFilter = filter
+        viewMode = 'list'
         
-        let url = 'http://localhost:8080/api/blogs?status=published';
+        let url = 'http://localhost:8080/api/blogs?status=published'
         if (filter !== 'all') {
-            url += `&author=${filter}`;
+            url += `&author=${filter}`
         }
 
-        const res = await fetch(url);
-        const data = await res.json();
-        blogs = data.data || [];
+        const res = await fetch(url)
+        const data = await res.json()
+        blogs = data.data || []
     }
 
-    // 2. Open Single Post
     async function openPost(blog) {
-        selectedBlog = blog;
-        viewMode = 'single';
-        await loadComments(blog.id);
+        selectedBlog = blog
+        viewMode = 'single'
+        await loadComments(blog.id)
     }
 
-    // 3. Load Comments
     async function loadComments(blogId) {
-        const res = await fetch(`http://localhost:8080/api/comments/${blogId}`);
-        const data = await res.json();
-        comments = data.data || [];
+        const res = await fetch(`http://localhost:8080/api/comments/${blogId}`)
+        const data = await res.json()
+        comments = data.data || []
     }
 
-    // 4. Post Comment
     async function postComment() {
-        if (!newComment.trim()) return;
+        if (!newComment.trim()) return
         await fetch('http://localhost:8080/api/comments', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ blogId: selectedBlog.id, content: newComment }),
             credentials: 'include'
-        });
-        newComment = "";
-        await loadComments(selectedBlog.id); // Refresh comments
+        })
+        newComment = ""
+        await loadComments(selectedBlog.id)
     }
 
-    onMount(() => loadBlogs('all'));
+    onMount(() => loadBlogs('all'))
 </script>
 
 <div class="corners-container">

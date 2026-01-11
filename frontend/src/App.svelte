@@ -9,15 +9,21 @@
 
     import { user } from './stores/userStore.js';
     import { currentPage } from './stores/pageStore.js';
+
+    import io from "socket.io-client";
+const socket = io("http://localhost:8080");
+socket.on("new_post_alert", (data) => {
+     alert(data.message); // Or use toastr if you have it
+})
     
     async function handleLogout() {
         try {
-            await fetch("http://localhost:8080/api/logout", { method: "POST", credentials: "include" });
+            await fetch("http://localhost:8080/api/logout", { method: "POST", credentials: "include" })
             $user = null;
-            $currentPage = 'home'; // Go to home after logout
-            alert("You have been logged out."); // Simple alert or use toastr if imported
+            $currentPage = 'home'
+            alert("You have been logged out.")
         } catch (error) {
-            console.error("Logout failed", error);
+            console.error("Logout failed", error)
         }
     }
 
@@ -34,7 +40,7 @@
         <h1 class="site-title">Bratz Magazine</h1>
 
         <img src="./images/jade_logo.png" alt="Jade Logo" class="site-logo" />
-        <img src="./images/yasmin_logo1.png" alt="Yasmin Logo" class="site-logo" />
+        <img src="./images/yasmin_logo.png" alt="Yasmin Logo" class="site-logo" />
     </div>
 
     <nav>

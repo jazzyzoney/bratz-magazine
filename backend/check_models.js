@@ -1,3 +1,4 @@
+// Gemini has provided me this code to be able to check what ai models i can use for my agents in this project
 import 'dotenv/config';
 
 const apiKey = process.env.GEMINI_API_KEY;

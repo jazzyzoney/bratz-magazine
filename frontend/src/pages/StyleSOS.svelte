@@ -18,27 +18,27 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question: newQuestion }),
             credentials: 'include'
-        });
-        newQuestion = "";
-        alert("Question sent to the Bratz pack!");
+        })
+        newQuestion = ""
+        alert("Question sent to the Bratz pack!")
     }
 
     async function triggerAIAnswer() {
-        message = "Consulting the girls...";
+        message = "Consulting the girls..."
         const res = await fetch('http://localhost:8080/api/sos/answer', { 
             method: 'POST', 
             credentials: 'include' 
-        });
-        const data = await res.json();
+        })
+        const data = await res.json()
         if(data.success) {
-            message = `✨ ${data.character} just answered a fan!`;
-            loadQuestions(); // Refresh list
+            message = `✨ ${data.character} just answered a fan!`
+            loadQuestions()
         } else {
-            message = data.error;
+            message = data.error
         }
     }
 
-    onMount(loadQuestions);
+    onMount(loadQuestions)
 </script>
 
 <div class="sos-container">
@@ -46,7 +46,7 @@
 
     {#if $user && $user.role === 'admin'}
         <div class="admin-panel">
-            <button on:click={triggerAIAnswer}>🔮 Answer Next Pending Question (AI)</button>
+            <button on:click={triggerAIAnswer}>🔮 Answer Next Pending Question</button>
             <p>{message}</p>
         </div>
     {/if}

@@ -52,7 +52,6 @@
   //   })
   // }
 
-  //signup
   async function handleSignup() {
     const res = await fetch("http://localhost:8080/api/signup", {
       method: "POST",
@@ -69,7 +68,6 @@
     }
   }
 
-  //login
   async function handleLogin() {
     const res = await fetch("http://localhost:8080/api/login", {
       method: "POST",

@@ -6,11 +6,11 @@ import { Server } from "socket.io"
 
 import session from "express-session" 
 
-const app = express();
+const app = express()
 
-const server = http.createServer(app);
+const server = http.createServer(app)
 
-app.use(express.json());
+app.use(express.json())
 
 app.use(cors({
     origin: 'http://localhost:5173', 

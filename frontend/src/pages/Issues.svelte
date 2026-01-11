@@ -1,22 +1,22 @@
 <script>
     import { onMount } from 'svelte';
     
-    let issues = [];
-    let selectedIssue = null; // If null, show list. If object, show issue.
+    let issues = []
+    let selectedIssue = null // null, show list. object, show issue
 
     async function loadIssues() {
-        const res = await fetch('http://localhost:8080/api/issues');
-        const data = await res.json();
-        issues = data.data;
+        const res = await fetch('http://localhost:8080/api/issues')
+        const data = await res.json()
+        issues = data.data
     }
 
     async function openIssue(id) {
-        const res = await fetch(`http://localhost:8080/api/issues/${id}`);
-        const data = await res.json();
-        selectedIssue = data; // Contains { issue, columns: [...] }
+        const res = await fetch(`http://localhost:8080/api/issues/${id}`)
+        const data = await res.json()
+        selectedIssue = data // Contains { issue, columns: [...] }
     }
 
-    onMount(loadIssues);
+    onMount(loadIssues)
 </script>
 
 <div class="magazine-rack">
