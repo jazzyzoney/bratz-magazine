@@ -2,7 +2,7 @@ import { Router } from 'express'
 import db from '../database/connection.js'
 import { isAdmin } from '../middleware/isAdmin.js'
 import { GoogleGenerativeAI } from "@google/generative-ai"
-import { sendEmail } from '../util/mailer.js'
+//import { sendEmail } from '../util/mailer.js'
 
 const router = Router()
 
@@ -82,31 +82,40 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
 
 // read
 router.get('/api/blogs', async (req, res) => {
-    //filtering the blogs
-    const { author, status } = req.query
+    try {
+        //filtering the blogs
+        const { author, status } = req.query
 
-    let query = "SELECT * FROM blogs WHERE 1=1"
-    let params = []
+        let query = "SELECT * FROM blogs WHERE 1=1"
+        let params = []
 
-    if (author) {
-        query += " AND lower(author) = lower(?)"
-        params.push(author)
+        if (author) {
+            query += " AND lower(author) = lower(?)"
+            params.push(author)
+        }
+        if (status) {
+            query += " AND trim(status) = ?"
+            params.push(status.trim())
+        }
+
+        query += " ORDER BY created_at DESC"
+
+        const blogs = await db.all(query, params)
+        res.json({ data: blogs })
+
+    } catch (error) {
+        console.error("blog loading error", error)
     }
-    if (status) {
-        query += " AND trim(status) = ?"
-        params.push(status.trim())
-    }
-
-    query += " ORDER BY created_at DESC"
-
-    const blogs = await db.all(query, params)
-    res.json({ data: blogs })
 })
 
 // read a single blog
 router.get('/api/blogs/:id', async (req, res) => {
-    const blog = await db.get('SELECT * FROM blogs WHERE id = ?', [req.params.id])
-    res.json({ data: blog })
+    try {
+        const blog = await db.get('SELECT * FROM blogs WHERE id = ?', [req.params.id])
+        res.json({ data: blog })
+    } catch (error) {
+        console.error("database error", error)
+    }
 })
 
 // admin routes
@@ -139,8 +148,12 @@ router.patch('/api/blogs/:id', isAdmin, async (req, res) => {
 
 // delete
 router.delete('/api/blogs/:id', isAdmin, async (req, res) => {
-    await db.run('DELETE FROM blogs WHERE id = ?', [req.params.id])
-    res.json({ message: "Blog deleted." })
+    try {
+        await db.run('DELETE FROM blogs WHERE id = ?', [req.params.id])
+        res.json({ message: "Blog deleted." })
+    } catch (error) {
+        console.error("error deleting blog", error)
+    }
 })
 
 // comment routes
@@ -175,8 +188,12 @@ router.post('/api/comments', async (req, res) => {
 
 // delete comments
 router.delete('/api/comments/:id', isAdmin, async (req, res) => {
-    await db.run('DELETE FROM comments WHERE id = ?', [req.params.id])
-    res.json({ message: "Comment deleted" })
+    try {
+        await db.run('DELETE FROM comments WHERE id = ?', [req.params.id])
+        res.json({ message: "Comment deleted" })
+    } catch (error) {
+        console.error("error deleting comment", error)
+    }
 })
 
 export default router

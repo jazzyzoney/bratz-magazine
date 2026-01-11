@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import Login from './pages/Login.svelte';
     import Home from './pages/Home.svelte'; 
     import Admin from './pages/Admin.svelte';
@@ -83,7 +84,7 @@
             </button>
         {:else}
             <button class="logout-btn" on:click={handleLogout}>
-                🚪 Logout ({$user.username})
+                🚪 Logout
             </button>
         {/if}
     </nav>

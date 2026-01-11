@@ -6,20 +6,28 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
 const router = Router()
 
 router.post('/api/sos', async (req, res) => {
-    if (!req.session.user) return res.status(401).json({ error: "login to ask a question babes!"})
-    
-    const { question } = req.body
-    
-    await db.run(
-        `INSERT INTO questions (email, question) VALUES (?, ?)`,
-        [req.session.user.email, question]
-    )
-    res.json({ success: true })
+    try {
+        if (!req.session.user) return res.status(401).json({ error: "login to ask a question babes!"})
+        
+        const { question } = req.body
+        
+        await db.run(
+            `INSERT INTO questions (email, question) VALUES (?, ?)`,
+            [req.session.user.email, question]
+        )
+        res.json({ success: true })
+    } catch (error) {
+        console.error("error saving question", error)
+    }
 })
 
 router.get('/api/sos', async (req, res) => {
-    const q = await db.all("SELECT * FROM questions WHERE status = 'answered' ORDER BY created_at DESC")
-    res.json({ data: q })
+    try {
+        const q = await db.all("SELECT * FROM questions WHERE status = 'answered' ORDER BY created_at DESC")
+        res.json({ data: q })
+    } catch (error) {
+        console.error("error fetching question", error)
+    }
 })
 
 // ---------------------------------------------
