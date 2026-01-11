@@ -2,6 +2,9 @@
     import { onMount } from 'svelte';
     import { user } from '../stores/userStore.js';
 
+    import toastr from 'toastr';
+    import 'toastr/build/toastr.min.css'
+
     let questions = [];
     let newQuestion = "";
     let message = "";
@@ -20,7 +23,7 @@
             credentials: 'include'
         })
         newQuestion = ""
-        alert("Question sent to the Bratz pack!")
+        toastr.success("Question sent to the Bratz pack!", "Sent💋")
     }
 
     async function triggerAIAnswer() {

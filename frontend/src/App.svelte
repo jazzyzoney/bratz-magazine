@@ -10,20 +10,31 @@
     import { user } from './stores/userStore.js';
     import { currentPage } from './stores/pageStore.js';
 
+    import toastr from 'toastr';
+    import 'toastr/build/toastr.min.css'
+
     import io from "socket.io-client";
-const socket = io("http://localhost:8080");
-socket.on("new_post_alert", (data) => {
-     alert(data.message); // Or use toastr if you have it
-})
+
+    toastr.options = {
+        "positionClass": "toast-bottom-right",
+        "closeButton": true,
+        "timeOut": "5000"
+    }
+
+    const socket = io("http://localhost:8080")
+    socket.on("new_post_alert", (data) => {
+        toastr.info(data.message, "New Update!💅")
+    })
     
     async function handleLogout() {
         try {
             await fetch("http://localhost:8080/api/logout", { method: "POST", credentials: "include" })
             $user = null;
             $currentPage = 'home'
-            alert("You have been logged out.")
+            toastr.success("You have been logged out.")
         } catch (error) {
             console.error("Logout failed", error)
+            toastr.error("Logout failed")
         }
     }
 

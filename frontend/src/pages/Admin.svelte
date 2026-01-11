@@ -2,6 +2,9 @@
     import { onMount } from 'svelte'
     import { user } from '../stores/userStore.js'
     import { currentPage } from '../stores/pageStore.js';
+
+    import toastr from 'toastr';
+    import 'toastr/build/toastr.min.css'
     
     let loading = false
     let message = ""
@@ -71,7 +74,7 @@
             credentials: 'include'
         })
         if (res.ok) {
-            message = "✨ Blog published to the homepage!"
+            toastr.success = ("✨ Blog published to the homepage!")
             $currentPage = 'home'
         }
     }
