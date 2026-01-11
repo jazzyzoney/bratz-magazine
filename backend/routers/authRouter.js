@@ -76,7 +76,11 @@ router.post("/api/login", async (req, res) => {
                 role: user.role
             }
         }
-        res.json({ message: "Logged in", role: user.role, isFirstLogin })
+        res.json({ 
+            message: "Logged in", 
+            role: user.role,
+            user: req.session.user, 
+            isFirstLogin })
 
     } catch (error) {
         console.error("login error", error)
