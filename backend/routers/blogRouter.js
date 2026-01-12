@@ -1,10 +1,12 @@
 import { Router } from 'express'
 import db from '../database/connection.js'
 import { isAdmin } from '../middleware/isAdmin.js'
-import { GoogleGenerativeAI } from "@google/generative-ai"
+//import { GoogleGenerativeAI } from "@google/generative-ai" 
 //import { sendEmail } from '../util/mailer.js'
+import Groq from "groq-sdk"
 
 const router = Router()
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 //agent personalities
 const bratzPersonalities = {
@@ -36,29 +38,29 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
     }
 
     try {
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
 
         const prompt = `${selectedPersona.prompt} 
         IMPORTANT: Write a catchy title on the very first line. Do NOT use markdown (like ##) for the title line. 
         Then add a newline. 
-        Then write the blog post body.`;
+        Then write the blog post body.`
 
-        const result = await model.generateContent(selectedPersona.prompt)
-        const fullText = result.response.text()
+        const completion = await groq.chat.completions.create({
+            messages: [{ role: "user", content: prompt }],
+            model: "llama-3.3-70b-versatile",
+        })
 
-        const firstLineIndex = fullText.indexOf('\n');
-        let title = "";
-        let content = "";
+        const fullText = completion.choices[0]?.message?.content || ""
+
+        const firstLineIndex = fullText.indexOf('\n')
+        let title = ""
+        let content = ""
 
         if (firstLineIndex !== -1) {
-            // Take the first line as title, remove any bolding (**title**)
-            title = fullText.substring(0, firstLineIndex).trim().replace(/\*\*/g, '');
-            // The rest is the content
-            content = fullText.substring(firstLineIndex + 1).trim();
+            title = fullText.substring(0, firstLineIndex).trim().replace(/\*\*/g, '')
+            content = fullText.substring(firstLineIndex + 1).trim()
         } else {
-            title = `${selectedPersona.name}'s Update`;
-            content = fullText;
+            title = `${selectedPersona.name}'s Update`
+            content = fullText
         }
 
         //saving the response from gemini in the database
@@ -76,7 +78,7 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
 
         //socket?
         req.io.emit("new_post_alert", { 
-            message: `${newPost.author} just posted: ${newPost.title}!`,
+            message: `${newPost.author} just drafted: ${newPost.title}!`,
             post: newPost 
         })
 

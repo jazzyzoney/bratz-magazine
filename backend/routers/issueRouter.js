@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import db from '../database/connection.js'
 import { isAdmin } from '../middleware/isAdmin.js'
-import { GoogleGenerativeAI } from "@google/generative-ai"
+//import { GoogleGenerativeAI } from "@google/generative-ai"
+import Groq from "groq-sdk"
 
-const router = Router();
+const router = Router()
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 router.get('/api/issues', async (req, res) => {
     try {
@@ -25,8 +27,6 @@ router.get('/api/issues/:id', async (req, res) => {
 })
 
 router.post('/api/issues/generate', isAdmin, async (req, res) => {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
 
     const assignments = [
         { 
@@ -70,8 +70,12 @@ router.post('/api/issues/generate', isAdmin, async (req, res) => {
             IMPORTANT: Start with a short, catchy headline for this column on the first line. 
             Then a newline. Then the article body.`;
 
-            const aiResult = await model.generateContent(task.prompt)
-            const fullText = aiResult.response.text()
+            const completion = await groq.chat.completions.create({
+                messages: [{ role: "user", content: prompt }],
+                model: "llama-3.3-70b-versatile",
+            })
+
+            const fullText = completion.choices[0]?.message?.content || ""
 
             const firstLineIndex = fullText.indexOf('\n');
             let specificTopic = task.topic; 

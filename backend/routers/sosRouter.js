@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import db from '../database/connection.js'
 import { isAdmin } from '../middleware/isAdmin.js'
-import { GoogleGenerativeAI } from "@google/generative-ai"
+//import { GoogleGenerativeAI } from "@google/generative-ai"
+import Groq from "groq-sdk"
 
 const router = Router()
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 router.post('/api/sos', async (req, res) => {
     try {
@@ -30,9 +32,6 @@ router.get('/api/sos', async (req, res) => {
     }
 })
 
-// ---------------------------------------------
-// PROTECTED ROUTES
-// ---------------------------------------------
 router.post('/api/sos/answer', isAdmin, async (req, res) => {
     try {
         const question = await db.get("SELECT * FROM questions WHERE status = 'pending' LIMIT 1") //find 1 wuestion
@@ -46,15 +45,14 @@ router.post('/api/sos/answer', isAdmin, async (req, res) => {
         ]
         const bratz = bratzSOS[Math.floor(Math.random() * bratzSOS.length)]
 
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
-
         const prompt = `You are ${bratz.name} from Bratz. Your personality is ${bratz.style}.
                         A fan asked: "${question.question}".
-                        Give a short, helpful advisary answer (max 150 words).`
-        
-        const result = await model.generateContent(prompt)
-        const answerText = result.response.text()
+                        Give a short, helpful advisory answer (max 150 words).`
+
+        const completion = await groq.chat.completions.create({
+            messages: [{ role: "user", content: prompt }],
+            model: "llama-3.3-70b-versatile",
+        })
 
         await db.run(
             `UPDATE questions SET answer = ?, answered_by = ?, status = 'answered' WHERE id = ?`,
