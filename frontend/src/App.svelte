@@ -155,7 +155,6 @@
         margin: 0;
         font-size: 3rem;
         color: #d63384;
-        text-transform: uppercase;
         letter-spacing: 2px;
         text-shadow: 2px 2px 0px #ffc0cb;
     }
