@@ -49,7 +49,11 @@
         <img src="./images/sasha_logo.png" alt="Sasha Logo" class="site-logo" />
         <img src="./images/cloe_logo.png" alt="Cloe Logo" class="site-logo" /> 
 
-        <h1 class="site-title">Bratz Magazine</h1>
+        <h1 class="site-title">
+            <a href="/" on:click|preventDefault={() => navigate('home')}>
+                Bratz Magazine
+            </a>
+        </h1>
 
         <img src="./images/jade_logo.png" alt="Jade Logo" class="site-logo" />
         <img src="./images/yasmin_logo.png" alt="Yasmin Logo" class="site-logo" />
@@ -117,27 +121,22 @@
 </main>
 
 <style>
-    /* GLOBAL BACKGROUND STYLE */
-    :global(body) {
-        margin: 0;
-        padding: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        /* Soft Pink/Purple Gradient */
-        background: linear-gradient(135deg, #fff0f5 0%, #e6e6fa 100%);
-        min-height: 100vh;
-        color: #333;
-    }
-
-    /* HEADER STYLES */
+/* HEADER STYLES */
     header {
         background-color: white;
-        padding-top: 20px;
-        padding-bottom: 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
         box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
         display: flex;
         flex-direction: column;
         align-items: center;
         margin-bottom: 30px;
+        
+        /* [FIX] Full Width Settings */
+        width: 100%;
+        position: sticky; /* Optional: Makes it stick to top when scrolling */
+        top: 0;
+        z-index: 1000;
     }
 
     .branding {
@@ -145,42 +144,50 @@
         align-items: center;
         justify-content: center;
         gap: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
+        width: 100%; /* Ensure branding takes full width */
     }
 
     .site-logo {
-        height: 60px; /* Adjust based on your image size */
+        height: 50px; /* Made slightly smaller for a tighter header */
         width: auto;
     }
 
     .site-title {
         margin: 0;
-        font-size: 2.5rem;
+        font-size: 2rem;
         color: #d63384; /* Deep Bratz Pink */
         text-transform: uppercase;
         letter-spacing: 2px;
         text-shadow: 2px 2px 0px #ffc0cb;
     }
 
+    .site-title a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Keep the pink color defined in .site-title */
+    cursor: pointer;
+    }
+
     /* NAVIGATION STYLES */
     nav { 
         display: flex; 
         gap: 15px; 
-        padding: 15px; 
+        padding: 10px; 
         justify-content: center;
         flex-wrap: wrap;
         width: 100%;
-        background-color: rgba(255, 255, 255, 0.5); /* Slight transparency */
+        background-color: rgba(255, 255, 255, 0.9); /* More opaque */
         border-top: 1px solid #ffe4e1;
     }
 
+    /* Keep your button styles... */
     button {
-        padding: 10px 20px;
+        padding: 8px 16px;
         cursor: pointer;
         border: 2px solid transparent;
         background: white;
-        border-radius: 25px; /* Pill shape */
-        font-size: 1rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
         font-weight: bold;
         color: #555;
         transition: all 0.2s ease;
@@ -202,12 +209,12 @@
     /* MAIN CONTAINER */
     main {
         padding: 20px;
-        max-width: 1200px; /* Prevents content from getting too wide */
-        margin: 0 auto;
+        max-width: 1200px; /* Keeps content readable/centered */
+        margin: 0 auto;    /* Centers the main block */
+        width: 90%;        /* Adds padding on small screens */
     }
 
     .content-card {
-        /* Optional: Gives content a white background card effect */
         background: rgba(255, 255, 255, 0.8);
         padding: 20px;
         border-radius: 20px;

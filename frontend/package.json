@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "socket.io-client": "^4.8.1",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "marked": "^15.0.0"
   }
 }

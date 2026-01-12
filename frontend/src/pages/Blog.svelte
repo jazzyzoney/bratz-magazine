@@ -1,4 +1,5 @@
 <script>
+    import { marked } from 'marked';
     import { onMount } from 'svelte';
     import { user } from '../stores/userStore.js';
     import { currentPostId, currentPage } from '../stores/pageStore.js';
@@ -51,7 +52,7 @@
             <h1>{blog.title}</h1>
             <p class="meta">By {blog.author} • {new Date(blog.created_at).toLocaleDateString()}</p>
             <div class="blog-body">
-                {@html blog.content} </div>
+                {@html marked.parse(blog.content)} </div>
         </article>
 
         <section class="comments-section">

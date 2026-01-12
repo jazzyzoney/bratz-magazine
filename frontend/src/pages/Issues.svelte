@@ -1,4 +1,5 @@
 <script>
+    import { marked } from 'marked';
     import { onMount } from 'svelte';
     
     let issues = []
@@ -47,7 +48,7 @@
                         <h3>{col.topic}</h3>
                         <p class="author">By {col.author}</p>
                         <hr>
-                        <p class="text">{col.content}</p>
+                        <p class="text">{@html marked.parse(col.content)}</p>
                     </div>
                 {/each}
             </div>

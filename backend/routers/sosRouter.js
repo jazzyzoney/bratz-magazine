@@ -51,7 +51,7 @@ router.post('/api/sos/answer', isAdmin, async (req, res) => {
 
         const prompt = `You are ${bratz.name} from Bratz. Your personality is ${bratz.style}.
                         A fan asked: "${question.question}".
-                        Give a ShadowRoot, helpful advisary answer (max 150 words).`
+                        Give a short, helpful advisary answer (max 150 words).`
         
         const result = await model.generateContent(prompt)
         const answerText = result.response.text()

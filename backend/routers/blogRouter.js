@@ -39,20 +39,39 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
 
+        const prompt = `${selectedPersona.prompt} 
+        IMPORTANT: Write a catchy title on the very first line. Do NOT use markdown (like ##) for the title line. 
+        Then add a newline. 
+        Then write the blog post body.`;
+
         const result = await model.generateContent(selectedPersona.prompt)
-        const aiResponse = result.response.text()
+        const fullText = result.response.text()
+
+        const firstLineIndex = fullText.indexOf('\n');
+        let title = "";
+        let content = "";
+
+        if (firstLineIndex !== -1) {
+            // Take the first line as title, remove any bolding (**title**)
+            title = fullText.substring(0, firstLineIndex).trim().replace(/\*\*/g, '');
+            // The rest is the content
+            content = fullText.substring(firstLineIndex + 1).trim();
+        } else {
+            title = `${selectedPersona.name}'s Update`;
+            content = fullText;
+        }
 
         //saving the response from gemini in the database
         const resultDB = await db.run(
             `INSERT INTO blogs (title, content, author, status) VALUES (?, ?, ?, ?)`,
-            [`${selectedPersona.name}'s Update`, aiResponse, selectedPersona.name, 'draft']
+            [title, content, selectedPersona.name, 'draft']
         )
 
        const newPost = {
             id: resultDB.lastID,
             title: `${selectedPersona.name}'s Update`,
             author: selectedPersona.name,
-            content: aiResponse
+            content
         }
 
         //socket?

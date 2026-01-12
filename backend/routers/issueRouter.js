@@ -65,8 +65,23 @@ router.post('/api/issues/generate', isAdmin, async (req, res) => {
 
         // requesting all agents at once
         await Promise.all(assignments.map(async (task) => {
+
+            const prompt = `${task.prompt} 
+            IMPORTANT: Start with a short, catchy headline for this column on the first line. 
+            Then a newline. Then the article body.`;
+
             const aiResult = await model.generateContent(task.prompt)
-            const content = aiResult.response.text()
+            const fullText = aiResult.response.text()
+
+            const firstLineIndex = fullText.indexOf('\n');
+            let specificTopic = task.topic; 
+            let content = fullText;
+
+            if (firstLineIndex !== -1) {
+                // Remove markdown symbols from the title
+                specificTopic = fullText.substring(0, firstLineIndex).trim().replace(/\*\*/g, '').replace(/^#+\s*/, '');
+                content = fullText.substring(firstLineIndex + 1).trim();
+            }
 
             await db.run(
                 `INSERT INTO issue_columns (issue_id, author, topic, content) VALUES (?, ?, ?, ?)`,

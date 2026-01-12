@@ -1,4 +1,5 @@
 <script>
+    import { marked } from 'marked';
     import { onMount } from 'svelte';
     import { user } from '../stores/userStore.js';
 
@@ -79,7 +80,7 @@
             <article>
                 <h1>{selectedBlog.title}</h1>
                 <p class="meta">By {selectedBlog.author}</p>
-                <div class="body">{@html selectedBlog.content}</div>
+                <div class="body">{@html marked.parse(selectedBlog.content)}</div>
             </article>
 
             <div class="comments">

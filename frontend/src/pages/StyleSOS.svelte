@@ -1,4 +1,5 @@
 <script>
+    import { marked } from 'marked';
     import { onMount } from 'svelte';
     import { user } from '../stores/userStore.js';
 
@@ -67,7 +68,7 @@
         {#each questions as q}
             <div class="qa-card">
                 <p class="q"><strong>Fan:</strong> {q.question}</p>
-                <p class="a"><strong>{q.answered_by}:</strong> {q.answer}</p>
+                <p class="a"><strong>{q.answered_by}:</strong> {@html marked.parse(q.answer)}</p>
             </div>
         {/each}
     </div>
