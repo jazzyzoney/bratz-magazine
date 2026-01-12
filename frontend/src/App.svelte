@@ -153,7 +153,7 @@
 
     .site-title {
         margin: 0;
-        font-size: 2rem;
+        font-size: 3rem;
         color: #d63384;
         text-transform: uppercase;
         letter-spacing: 2px;

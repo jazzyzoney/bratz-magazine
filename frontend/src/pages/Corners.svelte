@@ -28,7 +28,7 @@
 
 <div class="corners-container">
     <div class="header-section">
-        <h1>Corners Updates</h1>
+        <h1>Blog updates</h1>
         <p>Keep up with the girls!</p>
     </div>
 
@@ -55,7 +55,7 @@
 <style>
     .corners-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
     .header-section { text-align: center; margin-bottom: 30px; }
-    .header-section h1 { color: #d63384; margin-bottom: 5px; }
+    .header-section h1 { color: #000000; margin-bottom: 5px; }
 
     .menu { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;}
     .menu button { padding: 8px 16px; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; }

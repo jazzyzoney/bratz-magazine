@@ -48,7 +48,7 @@
 
 <div class="magazine-rack">
     {#if !selectedIssue}
-        <h1>📚 Magazine Archive</h1>
+        <h1>📚 Magazine archive</h1>
         <div class="grid">
             {#each issues as iss}
                 <button class="issue-cover" on:click={() => openIssue(iss.id)}>

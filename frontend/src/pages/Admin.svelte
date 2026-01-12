@@ -113,7 +113,7 @@
 </script>
 
 <main>
-    <h1>Personal Dashboard</h1>
+    <h1>Personal dashboard</h1>
     
     {#if $user}
         <h2>Welcome back, <span class="highlight">{$user.username}</span>! ✨</h2>
@@ -128,7 +128,7 @@
             </button>
 
             <button class="mag-btn" on:click={generateMagazine} disabled={loading}>
-            📚 Publish Monthly Magazine
+            📚 Publish monthly magazine
             </button>
         </div>
 
@@ -170,7 +170,7 @@
 <style>
     main { text-align: center; max-width: 600px; margin: 0 auto; padding: 20px; }
     
-    h1 { color: #333; }
+    h1 { color: #000000; }
     .highlight { color: #d63384; font-weight: bold; }
 
     .controls button {

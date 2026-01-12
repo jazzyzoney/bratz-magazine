@@ -130,13 +130,6 @@ router.patch('/api/blogs/:id', isAdmin, async (req, res) => {
     const { status, title, content } = req.body
 
     try {
-    //    if (status && !title && !content) {
-    //          await db.run('UPDATE blogs SET status = ? WHERE id = ?', [status, req.params.id]);
-    //     } 
-        // If we are editing content, run the full update
-
-        //const cleanStatus = status ? status.trim() : null;
-
         await db.run(
             `UPDATE blogs SET 
                 status = COALESCE(?, status), 

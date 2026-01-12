@@ -17,10 +17,8 @@
             const blogsData = await blogsRes.json()
             const issuesData = await issuesRes.json()
             
-            // latest 3 blogs
             blogs = (blogsData.data || []).slice(0, 3)
             
-            // the newest issue
             if (issuesData.data && issuesData.data.length > 0) {
                 latestIssue = issuesData.data[0]
             }
@@ -52,7 +50,7 @@
     <section class="intro-grid">
         <div class="intro-card">
             <h3>👑 Who We Are</h3>
-            <p>We are the <strong>Bratz Pack</strong>—Cloe, Jade, Sasha, and Yasmin. We created this magazine to express ourselves, share the hottest trends, and help you find your own unique sparkle.</p>
+            <p>We are the <strong>Bratz Pack</strong>: Cloe, Jade, Sasha, and Yasmin. We created this magazine to express ourselves, share the hottest trends, and help you find your own unique sparkle.</p>
         </div>
         <div class="intro-card">
             <h3>✨ What We Offer</h3>
@@ -62,19 +60,19 @@
 
     {#if latestIssue}
     <section class="issue-spotlight">
-        <h2>🔥 Hot Off The Press</h2>
+        <h2>🔥 Hot off the press</h2>
         <button class="issue-banner" on:click={goToIssues}>
             <div class="issue-content">
                 <h3>{latestIssue.title}</h3>
                 <p>Released: {new Date(latestIssue.publication_date).toLocaleDateString()}</p>
-                <span class="read-btn">Read Now →</span>
+                <span class="read-btn">Read now →</span>
             </div>
         </button>
     </section>
     {/if}
 
     <section class="latest-feed">
-        <h2>The Latest Scoop 🍦</h2>
+        <h2>The latest scoop 🍦</h2>
         
         {#if isLoading}
             <p>Loading the tea... ☕</p>
@@ -95,21 +93,21 @@
     </section>
 
     <section class="fun-zone">
-        <h2>Can't Get Enough? 💅</h2>
+        <h2>Want more passion? 💅</h2>
         <div class="fun-links">
             
             <a href="https://passion-for-node.vercel.app/" target="_blank" class="fun-btn code">
-                <h3>💻 Code with the Bratz</h3>
+                <h3>💻 Code with us</h3>
                 <p>Learn Node.js with our passion project!</p>
             </a>
 
             <a href="https://www.numuki.com/games/bratz/" target="_blank" class="fun-btn game">
-                <h3>🎮 Play Minigames</h3>
+                <h3>🎮 Play our minigames</h3>
                 <p>Dress up, makeup, and adventure!</p>
             </a>
 
             <a href="https://www.ea.com/en-gb/games/the-sims/the-sims-4/pc/gallery/E38C85E6B1AE432E892728F4A89DE05E" target="_blank" class="fun-btn sims">
-                <h3>💎 Play Sims with the Bratz</h3>
+                <h3>💎 Play Sims with us</h3>
                 <p>Download our household for The Sims 4.</p>
             </a>
 
@@ -133,7 +131,7 @@
         margin-bottom: 30px;
     }
     .hero h1 {
-        color: #d63384;
+        color: #000000;
         font-size: 2.5rem;
         margin-bottom: 10px;
         text-transform: uppercase;
@@ -188,7 +186,7 @@
     }
 
     .fun-zone { margin-bottom: 50px; }
-    .fun-zone h2 { color: #d63384; margin-bottom: 20px; }
+    .fun-zone h2 { color: #000000; margin-bottom: 20px; }
     
     .fun-links {
         display: flex;
@@ -219,7 +217,7 @@
     .game h3, .game p { color: #d63384; font-weight: bold; }
     .sims { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #005c4b; }
 
-    .latest-feed h2 { margin-bottom: 20px; color: #555; }
+    .latest-feed h2 { margin-bottom: 20px; color: #000000; }
     .blog-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
