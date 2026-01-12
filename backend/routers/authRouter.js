@@ -102,7 +102,26 @@ router.get("/api/auth-check", (req, res) => {
     }
 })
 
-// delete user ?
-//router.delete("/api/")
+router.delete("/api/users/:id", async (req, res) => {
+    if (!req.session.user) return res.status(401).json({ error: "not logged in" })
+    
+    const isSelf = req.session.user.id == req.params.id
+
+    // if (!isSelf) {
+    //     return res.status()
+    // }
+
+    try {
+        await db.run("DELETE FROM users WHERE id = ?", [req.params.id])
+
+        if (isSelf) {
+            req.session.destroy()
+        }
+
+        res.json({ message: "user deleted" })
+    } catch (error) {
+        res.status(500).json({ error: "failed to delete user" })
+    }
+})
 
 export default router

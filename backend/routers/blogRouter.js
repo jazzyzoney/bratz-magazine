@@ -72,11 +72,6 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
             content
         }
 
-        req.io.emit("new_post_alert", { 
-            message: `${newPost.author} just drafted: ${newPost.title}!`,
-            post: newPost 
-        })
-
         // or are they really fans?
         // const subscribers = await db.all("SELECT email FROM users WHERE role = 'user'")
         
@@ -151,13 +146,23 @@ router.patch('/api/blogs/:id', isAdmin, async (req, res) => {
             [status ? status.trim() : null, title, content, req.params.id]
         )
 
+        if (status === 'published') {
+            const blog = await db.get("SELECT * FROM blogs WHERE id = ?", [req.params.id])
+            
+            if (blog) {
+                req.io.emit("new_post_alert", { 
+                    message: `✨ ${blog.author} just posted: ${blog.title}!`,
+                    post: blog 
+                })
+            }
+        }
+
         res.json({ message: "Blog updated successfully" })
     } catch (error) {
         res.status(500).json({ error: "Update failed" })
     }
 })
 
-// not implemented in frontend yet
 router.delete('/api/blogs/:id', isAdmin, async (req, res) => {
     try {
         await db.run('DELETE FROM blogs WHERE id = ?', [req.params.id])

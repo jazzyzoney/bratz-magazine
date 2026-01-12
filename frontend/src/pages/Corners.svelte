@@ -1,20 +1,14 @@
 <script>
-    import { marked } from 'marked';
     import { onMount } from 'svelte';
-    import { user } from '../stores/userStore.js';
+    import { currentPostId, currentPage } from '../stores/pageStore.js'
 
-    let viewMode = 'list'
     let activeFilter = 'all'
     let blogs = []
-    let selectedBlog = null
-    let comments = []
-    let newComment = ""
 
     async function loadBlogs(filter) {
         activeFilter = filter
-        viewMode = 'list'
-        
         let url = 'http://localhost:8080/api/blogs?status=published'
+        
         if (filter !== 'all') {
             url += `&author=${filter}`
         }
@@ -24,113 +18,70 @@
         blogs = data.data || []
     }
 
-    async function openPost(blog) {
-        selectedBlog = blog
-        viewMode = 'single'
-        await loadComments(blog.id)
-    }
-
-    async function loadComments(blogId) {
-        const res = await fetch(`http://localhost:8080/api/comments/${blogId}`)
-        const data = await res.json()
-        comments = data.data || []
-    }
-
-    async function postComment() {
-        if (!newComment.trim()) return
-        await fetch('http://localhost:8080/api/comments', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ blogId: selectedBlog.id, content: newComment }),
-            credentials: 'include'
-        })
-        newComment = ""
-        await loadComments(selectedBlog.id)
+    function openPost(id) {
+        $currentPostId = id
+        $currentPage = 'blog'
     }
 
     onMount(() => loadBlogs('all'))
 </script>
 
 <div class="corners-container">
-    
-    {#if viewMode === 'list'}
-        <div class="menu">
-            <button on:click={() => loadBlogs('all')} class:active={activeFilter === 'all'}>All Updates</button>
-            <button on:click={() => loadBlogs('cloe')} class:active={activeFilter === 'cloe'}>Cloe</button>
-            <button on:click={() => loadBlogs('jade')} class:active={activeFilter === 'jade'}>Jade</button>
-            <button on:click={() => loadBlogs('sasha')} class:active={activeFilter === 'sasha'}>Sasha</button>
-            <button on:click={() => loadBlogs('yasmin')} class:active={activeFilter === 'yasmin'}>Yasmin</button>
-        </div>
+    <div class="header-section">
+        <h1>Corners Updates</h1>
+        <p>Keep up with the girls!</p>
+    </div>
 
-        <div class="grid">
-            {#each blogs as blog}
-                <button class="card" on:click={() => openPost(blog)}> 
-                    <h3>{blog.title}</h3>
-                    <p class="author">By {blog.author}</p>
-                    <p>{blog.content.substring(0, 100)}...</p>
-                    <span class="read-more">Read More →</span>
-                </button>
-            {/each}
-        </div>
+    <div class="menu">
+        <button on:click={() => loadBlogs('all')} class:active={activeFilter === 'all'}>All Updates</button>
+        <button on:click={() => loadBlogs('cloe')} class:active={activeFilter === 'cloe'}>Cloe</button>
+        <button on:click={() => loadBlogs('jade')} class:active={activeFilter === 'jade'}>Jade</button>
+        <button on:click={() => loadBlogs('sasha')} class:active={activeFilter === 'sasha'}>Sasha</button>
+        <button on:click={() => loadBlogs('yasmin')} class:active={activeFilter === 'yasmin'}>Yasmin</button>
+    </div>
 
-    {:else if viewMode === 'single' && selectedBlog}
-        <div class="single-view">
-            <button class="back-btn" on:click={() => viewMode = 'list'}>← Back to Feed</button>
-            
-            <article>
-                <h1>{selectedBlog.title}</h1>
-                <p class="meta">By {selectedBlog.author}</p>
-                <div class="body">{@html marked.parse(selectedBlog.content)}</div>
-            </article>
-
-            <div class="comments">
-                <h3>Comments</h3>
-                {#each comments as c}
-                    <div class="comment {c.role === 'admin' ? 'bratz-reply' : ''}">
-                        <strong>{c.username}:</strong> {c.content}
-                    </div>
-                {/each}
-
-                {#if $user}
-                    <div class="comment-box">
-                        <input bind:value={newComment} placeholder="Write a comment..." />
-                        <button on:click={postComment}>Post</button>
-                    </div>
-                {:else}
-                    <p><i>Login to comment!</i></p>
-                {/if}
-            </div>
-        </div>
-    {/if}
+    <div class="grid">
+        {#each blogs as blog}
+            <button class="card" on:click={() => openPost(blog.id)}> 
+                <h3>{blog.title}</h3>
+                <p class="author">By {blog.author}</p>
+                <p>{blog.content.substring(0, 100)}...</p>
+                <span class="read-more">Read More →</span>
+            </button>
+        {/each}
+    </div>
 </div>
 
 <style>
-    /* Add your styles here */
-    .menu { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;}
-    .menu button.active { background-color: #d63384; color: white; }
+    .corners-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .header-section { text-align: center; margin-bottom: 30px; }
+    .header-section h1 { color: #d63384; margin-bottom: 5px; }
+
+    .menu { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;}
+    .menu button { padding: 8px 16px; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; }
+    .menu button.active { background-color: #d63384; color: white; border-color: #d63384; }
     
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
     .card { 
         background: white; 
         padding: 20px; 
         border-radius: 10px; 
         cursor: pointer; 
         transition: transform 0.2s; 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-        margin-bottom: 15px;
-
-        /* Reset default button styles */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        
         border: none;
-        text-align: left; /* Buttons align center by default, we want left for text */
+        text-align: left;
         width: 100%;
         font-family: inherit;
         color: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
-    .card:hover { transform: translateY(-5px); }
-
-    .read-more { color: #d63384; font-weight: bold; }
-
-    .single-view { background: white; padding: 30px; border-radius: 15px; max-width: 800px; margin: 0 auto; }
-    .bratz-reply { background: #fff0f5; border-left: 4px solid #ff69b4; padding: 5px 10px; margin: 5px 0; }
-    .comment-box { display: flex; gap: 10px; margin-top: 15px; }
-    input { flex: 1; padding: 10px; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .card h3 { margin: 0; color: #333; }
+    .author { font-size: 0.9rem; color: #888; font-style: italic; margin: 0; }
+    .read-more { color: #d63384; font-weight: bold; margin-top: auto; }
 </style>

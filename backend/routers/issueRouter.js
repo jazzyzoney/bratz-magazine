@@ -98,6 +98,17 @@ router.post('/api/issues/generate', isAdmin, async (req, res) => {
     }
 })
 
-// delete issue
+router.delete('/api/issues/:id', isAdmin, async (req, res) => {
+    try {
+        await db.run("DELETE FROM issue_columns WHERE issue_id = ?", [req.params.id])
+
+        await db.run("DELETE FROM issues WHERE id = ?", [req.params.id])
+        
+        res.json({ message: "Issue deleted successfully" })
+
+    } catch (error) {
+        res.status(500).json({ error: "failed to delete issue" })
+    }
+})
 
 export default router

@@ -57,7 +57,7 @@
             }
         } catch(e) { message = "Error generating issue" }
         finally { loading = false }
-}
+    }
 
     async function loadDrafts() {
         if (!$user) return
@@ -78,6 +78,37 @@
             $currentPage = 'home'
         }
     }
+
+    async function deleteBlog(id) {
+        if(!confirm("Are you sure you want to delete this blog?")) return
+
+        const res = await fetch(`http://localhost:8080/api/blogs/${id}`, {
+            method: 'DELETE', credentials: 'include'
+        })
+        
+        if (res.ok) {
+            toastr.success("Draft deleted.")
+            loadDrafts()
+        } else {
+            toastr.error("Failed to delete.")
+        }
+    }
+
+    async function deleteAccount() {
+        if(!confirm("⚠️ irreversible! Delete your account?")) return
+
+        const res = await fetch(`http://localhost:8080/api/users/${$user.id}`, {
+            method: 'DELETE', credentials: 'include'
+        })
+
+        if (res.ok) {
+            $user = null
+            window.location.href = "/"
+        } else {
+            toastr.error("Could not delete account.")
+        }
+    }
+
     onMount(loadDrafts)
 </script>
 
@@ -113,19 +144,24 @@
             {:else}
                 <div class="draft-list">
                     {#each drafts as draft}
-                        <div class="draft-card">
-                            <div class="draft-info">
-                                <h4>{draft.title}</h4>
-                                <p class="preview">{draft.content ? draft.content.substring(0, 60) + '...' : 'No content'}</p>
-                            </div>
-                            <button class="publish-btn" on:click={() => publishDraft(draft.id)}>
-                                ✅ Publish
-                            </button>
+                <div class="draft-card">
+                    <div class="draft-info">
+                        <h4>{draft.title}</h4>
                         </div>
-                    {/each}
+                    <div class="actions">
+                        <button class="publish-btn" on:click={() => publishDraft(draft.id)}>✅ Publish</button>
+                        <button class="delete-btn" on:click={() => deleteBlog(draft.id)}>🗑️</button>
+                    </div>
+                </div>
+            {/each}
                 </div>
             {/if}
         </div>
+
+        <button class="delete-account-btn" on:click={deleteAccount}>
+            ❌ Delete my account
+        </button>
+
     {:else}
         <p>Loading user data...</p>
     {/if}
@@ -191,4 +227,7 @@
     .empty-msg { color: #888; font-style: italic; text-align: center; }
 
     .mag-btn { background: #6f42c1; color: white; width: 100%; margin-top: 10px; }
+
+    .delete-btn { background: #dc3545; color: white; padding: 8px 12px; border-radius: 5px; margin-left: 5px; border:none;}
+    .delete-account-btn { background: #dc3545; color: white; margin-top: 30px; font-size: 0.8rem; padding: 10px; }
 </style>

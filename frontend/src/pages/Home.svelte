@@ -63,13 +63,13 @@
     {#if latestIssue}
     <section class="issue-spotlight">
         <h2>🔥 Hot Off The Press</h2>
-        <div class="issue-banner" on:click={goToIssues}>
+        <button class="issue-banner" on:click={goToIssues}>
             <div class="issue-content">
                 <h3>{latestIssue.title}</h3>
                 <p>Released: {new Date(latestIssue.publication_date).toLocaleDateString()}</p>
                 <span class="read-btn">Read Now →</span>
             </div>
-        </div>
+        </button>
     </section>
     {/if}
 
@@ -83,12 +83,12 @@
         {:else}
             <div class="blog-grid">
                 {#each blogs as blog}
-                    <div class="mini-card" on:click={() => openPost(blog.id)}>
+                    <button class="mini-card" on:click={() => openPost(blog.id)}>
                         <h4>{blog.title}</h4>
                         <p class="author">By {blog.author}</p>
                         <p class="preview">{blog.content.replace(/<[^>]*>?/gm, '').substring(0, 80)}...</p>
                         <span class="read-link">Read More →</span>
-                    </div>
+                    </button>
                 {/each}
             </div>
         {/if}
@@ -166,6 +166,12 @@
     .issue-spotlight h2 { color: #d63384; margin-bottom: 20px; }
     
     .issue-banner {
+        /* [FIX] Reset button styles */
+        border: none;
+        width: 100%;
+        text-align: left; /* or center, depending on your pref */
+        font-family: inherit;
+        /* Keep existing styles below */
         background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
         padding: 40px;
         border-radius: 15px;
@@ -228,13 +234,18 @@
         gap: 15px;
     }
     .mini-card {
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        text-align: left;
-        cursor: pointer;
-        transition: transform 0.2s;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    /* [FIX] Reset button styles */
+    border: none;
+    width: 100%;
+    font-family: inherit;
+    /* Keep existing styles below */
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     .mini-card:hover { transform: scale(1.02); }
     .mini-card h4 { margin: 0 0 5px 0; color: #d63384; }

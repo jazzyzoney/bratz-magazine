@@ -53,6 +53,8 @@ router.post('/api/sos/answer', isAdmin, async (req, res) => {
             model: "llama-3.3-70b-versatile",
         })
 
+        const answerText = completion.choices[0]?.message?.content || ""
+
         await db.run(
             `UPDATE questions SET answer = ?, answered_by = ?, status = 'answered' WHERE id = ?`,
             [answerText, bratz.name, question.id]

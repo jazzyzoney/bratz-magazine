@@ -1,6 +1,11 @@
 <script>
     import { marked } from 'marked';
     import { onMount } from 'svelte';
+
+    import { user } from '../stores/userStore';
+
+    import toastr from 'toastr';
+    import 'toastr/build/toastr.min.css'
     
     let issues = []
     let selectedIssue = null // null, show list. object, show issue
@@ -14,7 +19,28 @@
     async function openIssue(id) {
         const res = await fetch(`http://localhost:8080/api/issues/${id}`)
         const data = await res.json()
-        selectedIssue = data // Contains { issue, columns: [...] }
+        selectedIssue = data
+    }
+
+    async function deleteIssue(id, event) {
+        event.stopPropagation()
+
+        try {
+        const res = await fetch(`http://localhost:8080/api/issues/${id}`, {
+            method: 'DELETE', credentials: 'include'
+        })
+
+        if(res.ok) {
+            toastr.success("Magazine deleted.")
+            loadIssues()
+        } else {
+            const data = await res.json();
+                toastr.error(data.error || "Failed to delete.");
+            }
+        } catch (error) {
+            console.error(error);
+            toastr.error("Network error. Could not delete.");
+        }
     }
 
     onMount(loadIssues)
@@ -28,8 +54,13 @@
                 <button class="issue-cover" on:click={() => openIssue(iss.id)}>
                     <div class="logo">BRATZ</div>
                     <h2>{iss.title}</h2>
+
                     <p>Released: {new Date(iss.publication_date).toLocaleDateString()}</p>
                     <span class="fake-btn">Read Issue</span>
+
+                    {#if $user && $user.role === 'admin'}
+                        <button class="delete-issue-btn" on:click={(e) => deleteIssue(iss.id, e)}>🗑️ Delete</button>
+                    {/if}
                 </button>
             {/each}
         </div>
@@ -105,4 +136,16 @@
     /* Specific styles for authors */
     .jade h3 { border-color: #39ff14; color: #333; }
     .cloe h3 { border-color: #ff69b4; color: #d63384; }
+    .yasmin h3 { border-color: #fbc2eb; color: #a18cd1; }
+    .sasha h3 { border-color: #edde5d; color: #f09819; }
+
+    .delete-issue-btn {
+        display: block; 
+        background: #dc3545; 
+        color: white; 
+        padding: 5px; 
+        border-radius: 5px; 
+        margin-top: 10px;
+        font-size: 0.8rem;
+    }
 </style>
