@@ -125,7 +125,6 @@
         text-align: center;
     }
 
-    /* HERO */
     .hero {
         padding: 40px 20px;
         background: white;
@@ -146,7 +145,6 @@
         font-style: italic;
     }
 
-    /* INTRO GRID */
     .intro-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -161,17 +159,14 @@
     }
     .intro-card h3 { color: #333; margin-bottom: 10px; }
 
-    /* [NEW] ISSUE SPOTLIGHT */
     .issue-spotlight { margin-bottom: 50px; }
     .issue-spotlight h2 { color: #d63384; margin-bottom: 20px; }
     
     .issue-banner {
-        /* [FIX] Reset button styles */
         border: none;
         width: 100%;
-        text-align: left; /* or center, depending on your pref */
+        text-align: center; 
         font-family: inherit;
-        /* Keep existing styles below */
         background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
         padding: 40px;
         border-radius: 15px;
@@ -192,7 +187,6 @@
         font-weight: bold; 
     }
 
-    /* FUN ZONE */
     .fun-zone { margin-bottom: 50px; }
     .fun-zone h2 { color: #d63384; margin-bottom: 20px; }
     
@@ -220,13 +214,11 @@
     .fun-btn h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
     .fun-btn p { margin: 0; font-size: 0.9rem; opacity: 0.9; }
 
-    /* Fun Colors */
     .code { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); } 
     .game { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #d63384; }
     .game h3, .game p { color: #d63384; font-weight: bold; }
     .sims { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #005c4b; }
 
-    /* LATEST FEED */
     .latest-feed h2 { margin-bottom: 20px; color: #555; }
     .blog-grid {
         display: grid;
@@ -234,11 +226,9 @@
         gap: 15px;
     }
     .mini-card {
-    /* [FIX] Reset button styles */
     border: none;
     width: 100%;
     font-family: inherit;
-    /* Keep existing styles below */
     background: white;
     padding: 15px;
     border-radius: 8px;

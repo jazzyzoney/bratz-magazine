@@ -173,7 +173,6 @@
     h1 { color: #333; }
     .highlight { color: #d63384; font-weight: bold; }
 
-    /* Generate Button Styles */
     .controls button {
         color: white;
         border: none;
@@ -188,7 +187,6 @@
     .controls button:hover { transform: scale(1.05); }
     .controls button:disabled { background-color: #ccc; cursor: not-allowed; }
 
-    /* Character Themes */
     .cloe { background: linear-gradient(45deg, #ff9a9e, #fad0c4); color: black; }
     .jade { background: black; border: 2px solid #39ff14; color: #39ff14; }
     .sasha { background: linear-gradient(45deg, #f09819, #edde5d); color: black; }
@@ -196,7 +194,6 @@
 
     .status { margin-top: 20px; font-weight: bold; color: #d63384; }
 
-    /* Draft List Styles */
     .drafts-section { margin-top: 40px; text-align: left; border-top: 1px solid #ccc; padding-top: 20px; }
     .draft-card { 
         background: white; 

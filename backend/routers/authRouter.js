@@ -79,7 +79,7 @@ router.post("/api/login", async (req, res) => {
         res.json({ 
             message: "Logged in", 
             role: user.role,
-            user: req.session.user, // essential for loading the page correctly after logging in
+            user: req.session.user,
             isFirstLogin })
 
     } catch (error) {
@@ -106,10 +106,6 @@ router.delete("/api/users/:id", async (req, res) => {
     if (!req.session.user) return res.status(401).json({ error: "not logged in" })
     
     const isSelf = req.session.user.id == req.params.id
-
-    // if (!isSelf) {
-    //     return res.status()
-    // }
 
     try {
         await db.run("DELETE FROM users WHERE id = ?", [req.params.id])

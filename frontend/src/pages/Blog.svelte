@@ -164,7 +164,6 @@
     
     .post-btn { background: #d63384; color: white; border: none; padding: 0 20px; border-radius: 5px; cursor: pointer; }
     
-    /* Delete Buttons */
     .delete-btn { 
         background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem;
     }

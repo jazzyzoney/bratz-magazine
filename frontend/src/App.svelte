@@ -121,7 +121,6 @@
 </main>
 
 <style>
-/* HEADER STYLES */
     header {
         background-color: white;
         padding-top: 10px;
@@ -132,9 +131,8 @@
         align-items: center;
         margin-bottom: 30px;
         
-        /* [FIX] Full Width Settings */
         width: 100%;
-        position: sticky; /* Optional: Makes it stick to top when scrolling */
+        position: sticky; 
         top: 0;
         z-index: 1000;
     }
@@ -145,18 +143,18 @@
         justify-content: center;
         gap: 15px;
         margin-bottom: 10px;
-        width: 100%; /* Ensure branding takes full width */
+        width: 100%;
     }
 
     .site-logo {
-        height: 50px; /* Made slightly smaller for a tighter header */
+        height: 50px;
         width: auto;
     }
 
     .site-title {
         margin: 0;
         font-size: 2rem;
-        color: #d63384; /* Deep Bratz Pink */
+        color: #d63384;
         text-transform: uppercase;
         letter-spacing: 2px;
         text-shadow: 2px 2px 0px #ffc0cb;
@@ -168,7 +166,6 @@
     cursor: pointer;
     }
 
-    /* NAVIGATION STYLES */
     nav { 
         display: flex; 
         gap: 15px; 
@@ -176,11 +173,10 @@
         justify-content: center;
         flex-wrap: wrap;
         width: 100%;
-        background-color: rgba(255, 255, 255, 0.9); /* More opaque */
+        background-color: rgba(255, 255, 255, 0.9); 
         border-top: 1px solid #ffe4e1;
     }
 
-    /* Keep your button styles... */
     button {
         padding: 8px 16px;
         cursor: pointer;
@@ -206,7 +202,6 @@
         box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4);
     }
 
-    /* MAIN CONTAINER */
     main {
         padding: 20px;
         max-width: 1200px; /* Keeps content readable/centered */

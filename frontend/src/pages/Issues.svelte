@@ -8,7 +8,7 @@
     import 'toastr/build/toastr.min.css'
     
     let issues = []
-    let selectedIssue = null // null, show list. object, show issue
+    let selectedIssue = null
 
     async function loadIssues() {
         const res = await fetch('http://localhost:8080/api/issues')
@@ -88,7 +88,6 @@
 </div>
 
 <style>
-    /* Styling to look like a magazine */
     .issue-cover { 
         background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
         padding: 40px; 
@@ -99,15 +98,13 @@
         box-shadow: 5px 5px 15px rgba(0,0,0,0.2); 
         transition: transform 0.2s;
         
-        /* Reset default button styles */
         border: none;
         width: 100%;
-        display: block; /* Ensure it takes up grid space */
+        display: block;
         font-family: inherit;
     }
     .issue-cover:hover { transform: scale(1.05); }
 
-    /* Style the fake inner button */
     .fake-btn {
         background: white;
         color: #d63384;
@@ -133,7 +130,6 @@
     }
     .column-page h3 { text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid black; padding-bottom: 10px; }
     
-    /* Specific styles for authors */
     .jade h3 { border-color: #39ff14; color: #333; }
     .cloe h3 { border-color: #ff69b4; color: #d63384; }
     .yasmin h3 { border-color: #fbc2eb; color: #a18cd1; }
