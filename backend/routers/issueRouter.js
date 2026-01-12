@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import db from '../database/connection.js'
 import { isAdmin } from '../middleware/isAdmin.js'
-//import { GoogleGenerativeAI } from "@google/generative-ai"
 import Groq from "groq-sdk"
 
 const router = Router()
@@ -63,12 +62,11 @@ router.post('/api/issues/generate', isAdmin, async (req, res) => {
         const result = await db.run("INSERT INTO issues (title) VALUES (?)", [issueTitle])
         const issueId = result.lastID;
 
-        // requesting all agents at once
         await Promise.all(assignments.map(async (task) => {
 
             const prompt = `${task.prompt} 
             IMPORTANT: Start with a short, catchy headline for this column on the first line. 
-            Then a newline. Then the article body.`;
+            Then a newline. Then the article body.`
 
             const completion = await groq.chat.completions.create({
                 messages: [{ role: "user", content: prompt }],
@@ -77,14 +75,13 @@ router.post('/api/issues/generate', isAdmin, async (req, res) => {
 
             const fullText = completion.choices[0]?.message?.content || ""
 
-            const firstLineIndex = fullText.indexOf('\n');
-            let specificTopic = task.topic; 
-            let content = fullText;
+            const firstLineIndex = fullText.indexOf('\n')
+            let specificTopic = task.topic
+            let content = fullText
 
             if (firstLineIndex !== -1) {
-                // Remove markdown symbols from the title
-                specificTopic = fullText.substring(0, firstLineIndex).trim().replace(/\*\*/g, '').replace(/^#+\s*/, '');
-                content = fullText.substring(firstLineIndex + 1).trim();
+                specificTopic = fullText.substring(0, firstLineIndex).trim().replace(/\*\*/g, '').replace(/^#+\s*/, '')
+                content = fullText.substring(firstLineIndex + 1).trim()
             }
 
             await db.run(

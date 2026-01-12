@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import db from '../database/connection.js'
 import { isAdmin } from '../middleware/isAdmin.js'
-//import { GoogleGenerativeAI } from "@google/generative-ai"
 import Groq from "groq-sdk"
 
 const router = Router()
@@ -34,7 +33,7 @@ router.get('/api/sos', async (req, res) => {
 
 router.post('/api/sos/answer', isAdmin, async (req, res) => {
     try {
-        const question = await db.get("SELECT * FROM questions WHERE status = 'pending' LIMIT 1") //find 1 wuestion
+        const question = await db.get("SELECT * FROM questions WHERE status = 'pending' LIMIT 1")
         if (!question) return res.status(400).json({ error: "no pending questions" })
 
         const bratzSOS = [

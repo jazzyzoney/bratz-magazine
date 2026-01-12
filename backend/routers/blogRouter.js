@@ -1,14 +1,12 @@
 import { Router } from 'express'
 import db from '../database/connection.js'
 import { isAdmin } from '../middleware/isAdmin.js'
-//import { GoogleGenerativeAI } from "@google/generative-ai" 
 //import { sendEmail } from '../util/mailer.js'
 import Groq from "groq-sdk"
 
 const router = Router()
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-//agent personalities
 const bratzPersonalities = {
     cloe: {
         name: "Cloe",
@@ -28,7 +26,6 @@ const bratzPersonalities = {
     }
 }
 
-// create
 router.post('/api/blogs/generate',isAdmin, async (req, res) => {
     const { character } = req.body
     const selectedPersona = bratzPersonalities[character]
@@ -63,7 +60,6 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
             content = fullText
         }
 
-        //saving the response from gemini in the database
         const resultDB = await db.run(
             `INSERT INTO blogs (title, content, author, status) VALUES (?, ?, ?, ?)`,
             [title, content, selectedPersona.name, 'draft']
@@ -76,7 +72,6 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
             content
         }
 
-        //socket?
         req.io.emit("new_post_alert", { 
             message: `${newPost.author} just drafted: ${newPost.title}!`,
             post: newPost 
@@ -101,10 +96,8 @@ router.post('/api/blogs/generate',isAdmin, async (req, res) => {
     }
 })
 
-// read
 router.get('/api/blogs', async (req, res) => {
     try {
-        //filtering the blogs
         const { author, status } = req.query
 
         let query = "SELECT * FROM blogs WHERE 1=1"
@@ -129,7 +122,6 @@ router.get('/api/blogs', async (req, res) => {
     }
 })
 
-// read a single blog
 router.get('/api/blogs/:id', async (req, res) => {
     try {
         const blog = await db.get('SELECT * FROM blogs WHERE id = ?', [req.params.id])
@@ -139,8 +131,6 @@ router.get('/api/blogs/:id', async (req, res) => {
     }
 })
 
-// admin routes
-// patch 
 router.patch('/api/blogs/:id', isAdmin, async (req, res) => {
     const { status, title, content } = req.body
 
@@ -167,7 +157,7 @@ router.patch('/api/blogs/:id', isAdmin, async (req, res) => {
     }
 })
 
-// delete
+// not implemented in frontend yet
 router.delete('/api/blogs/:id', isAdmin, async (req, res) => {
     try {
         await db.run('DELETE FROM blogs WHERE id = ?', [req.params.id])
@@ -177,7 +167,6 @@ router.delete('/api/blogs/:id', isAdmin, async (req, res) => {
     }
 })
 
-// comment routes
 router.get('/api/comments/:blogId', async (req, res) => {
     try {
         const comments = await db.all(
@@ -207,7 +196,6 @@ router.post('/api/comments', async (req, res) => {
     }
 })
 
-// delete comments
 router.delete('/api/comments/:id', isAdmin, async (req, res) => {
     try {
         await db.run('DELETE FROM comments WHERE id = ?', [req.params.id])

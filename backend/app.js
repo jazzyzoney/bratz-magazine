@@ -49,7 +49,6 @@ app.use(sosRouter)
 import issueRouter from "./routers/issueRouter.js"
 app.use(issueRouter) 
 
-// fallback
 app.all("/{*splat}", (req, res) => { 
     res.send(`<h1>404</h1> <h3>Didn't find a matching route</h3>`)
 })

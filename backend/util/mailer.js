@@ -12,9 +12,8 @@ const transporter = nodemailer.createTransport({
 
 //dummy function to get the app running
 export async function sendEmail(to, subject, text) {
-    console.log(`📧 [MOCK EMAIL SENT]`);
-    console.log(`   To: ${to}`);
-    console.log(`   Subject: ${subject}`);
-    // console.log(`   Body: ${text}`); 
-    return true; 
+    console.log(`📧 [MOCK EMAIL SENT]`)
+    console.log(`   To: ${to}`)
+    console.log(`   Subject: ${subject}`)
+    return true
 }
