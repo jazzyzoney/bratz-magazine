@@ -94,10 +94,9 @@ async function setup() {
                 await db.run(
                     `INSERT INTO users (username, email, password, role, login_count) VALUES (?, ?, ?, ?, ?)`,
                     [admin.name, admin.email, passwordHash, 'admin', 1]
-                );
-                console.log(`✨ Created Admin: ${admin.name}`)
+                )
             } catch (err) {
-            //ignore error if they already exist
+            //ignore
             }
         }
     
