@@ -57,11 +57,11 @@
 
                     <p>Released: {new Date(iss.publication_date).toLocaleDateString()}</p>
                     <span class="fake-btn">Read Issue</span>
-
-                    {#if $user && $user.role === 'admin'}
-                        <button class="delete-issue-btn" on:click={(e) => deleteIssue(iss.id, e)}>🗑️ Delete</button>
-                    {/if}
+                    
                 </button>
+                {#if $user && $user.role === 'admin'}
+                    <button class="delete-issue-btn" on:click={(e) => deleteIssue(iss.id, e)}>🗑️ Delete</button>
+                {/if}
             {/each}
         </div>
 
