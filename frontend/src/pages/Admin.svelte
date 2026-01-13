@@ -80,8 +80,6 @@
     }
 
     async function deleteBlog(id) {
-        if(!confirm("Are you sure you want to delete this blog?")) return
-
         const res = await fetch(`http://localhost:8080/api/blogs/${id}`, {
             method: 'DELETE', credentials: 'include'
         })
