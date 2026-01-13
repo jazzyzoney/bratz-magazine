@@ -83,7 +83,7 @@
 
 <main>
     <div class="card">
-      <h1>Login / Sign Up</h1>
+      <h1>Login</h1>
       <input type="email" bind:value={email} placeholder="Email"/>
       <input type="password" bind:value={password} placeholder="Password"/>
       
